@@ -2,8 +2,8 @@ package com.example.voiceagent.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.openai.client.OpenAIClient;
-import com.openai.client.okhttp.OpenAIOkHttpClient;
+// import com.openai.client.OpenAIClient;
+// import com.openai.client.okhttp.OpenAIOkHttpClient;
 import okhttp3.*;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
@@ -26,10 +27,23 @@ public class VoiceService {
     private static final String TTS_MODEL = "tts-1";
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    private final OpenAIClient openAiClient;
+    // private final OpenAIClient openAiClient;
     private final OkHttpClient okHttp;
     private final Logger logger = LoggerFactory.getLogger(VoiceService.class);
     private final String openAiApiKey;
+
+    public byte[] mockResponse() {
+        try (InputStream is = getClass().getResourceAsStream("/sample-response.mp3")) {
+            if (is == null) {
+                logger.warn("Sample response audio not found, returning empty byte array");
+                return new byte[0];
+            }
+            return is.readAllBytes();
+        } catch (IOException e) {
+            logger.warn("Error reading sample response audio, returning empty byte array", e);
+            return new byte[0];
+        }
+    }
 
     public VoiceService(@Value("${openai.api.key}") String openAiApiKey) {
         this.openAiApiKey = openAiApiKey;
@@ -40,9 +54,9 @@ public class VoiceService {
             throw new IllegalStateException("OpenAI API key is required");
         }
 
-        this.openAiClient = OpenAIOkHttpClient.builder()
-                .apiKey(openAiApiKey)
-                .build();
+        // this.openAiClient = OpenAIOkHttpClient.builder()
+        // .apiKey(openAiApiKey)
+        // .build();
 
         this.okHttp = new OkHttpClient.Builder()
                 .callTimeout(60, TimeUnit.SECONDS)
@@ -52,9 +66,6 @@ public class VoiceService {
                 .build();
     }
 
-    /**
-     * Full pipeline: audio bytes -> transcribe -> LLM -> TTS -> mp3 bytes
-     */
     public byte[] processWithOpenAI(byte[] audioBytes) {
         try {
             Path tempFile = Files.createTempFile("upload-", ".wav");
@@ -75,15 +86,6 @@ public class VoiceService {
         } catch (Exception e) {
             logger.error("Failed to process audio with OpenAI", e);
             throw new RuntimeException("Failed to process audio with OpenAI", e);
-        }
-    }
-
-    public byte[] mockResponse() {
-        try {
-            return Files.readAllBytes(Path.of("src/main/resources/sample-response.mp3"));
-        } catch (IOException e) {
-            logger.warn("Sample response audio not found, returning empty byte array");
-            return new byte[0];
         }
     }
 

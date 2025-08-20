@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/audio")
+@CrossOrigin(origins = "*")
+
 public class AudioController {
 
     @Value("${voiceagent.mode}")
@@ -22,10 +24,12 @@ public class AudioController {
     @PostMapping("/process")
     public ResponseEntity<byte[]> processAudio(@RequestBody byte[] audioBytes) {
         byte[] result = mode.equals("mock")
-                ? voiceService.processWithOpenAI(audioBytes)
-                : voiceService.mockResponse();
+                ? voiceService.mockResponse()
+                : voiceService.processWithOpenAI(audioBytes);
+
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_TYPE, "audio/mpeg")
                 .body(result);
     }
+
 }
