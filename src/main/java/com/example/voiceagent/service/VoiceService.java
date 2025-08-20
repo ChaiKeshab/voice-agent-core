@@ -24,7 +24,7 @@ public class VoiceService {
 
     private static final String TRANSCRIPTION_MODEL = "whisper-1";
     private static final String CHAT_MODEL = "gpt-4o-mini";
-    private static final String TTS_MODEL = "tts-1";
+    private static final String TTS_MODEL = "gpt-4o-mini-tts";
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     // private final OpenAIClient openAiClient;
