@@ -4,7 +4,7 @@ A minimal **MVP core** for building a real‑time AI **voice agent** (speech →
 
 * **STT**: `whisper-1`
 * **LLM**: `gpt-4o-mini`
-* **TTS**: `tts-1`
+* **TTS**: `gpt-4o-mini-tts`
 * Two implementations: **Raw HTTP** (*`http` branch*) and **Official OpenAI Java SDK** (*`main` branch*)
 
 > Real‑time features like sockets/WebRTC are intentionally **not included** yet — this is a bare core for speech‑to‑speech.
@@ -71,7 +71,7 @@ The service will be available at **[http://localhost:8080](http://localhost:8080
 * **JDK 17+** (Temurin/Adoptium recommended)
 * **Maven 3.9+**
 * **FFmpeg (optional)** if you plan to transcode audio server‑side
-* **OpenAI API key** with models: `whisper-1`, `gpt-4o-mini`, `tts-1`
+* **OpenAI API key** with models: `whisper-1`, `gpt-4o-mini`, `gpt-4o-mini-tts`
 
 ### Configure
 
