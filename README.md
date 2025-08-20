@@ -88,7 +88,7 @@ server.port=8080
 
 ### Run (Spring Boot)
 
-**With Maven plugin (dev‑friendly):**
+**With Maven plugin:**
 
 ```bash
 mvn spring-boot:run
@@ -126,7 +126,7 @@ Accepts raw audio bytes, performs STT → LLM → TTS, and returns synthesized a
 ```bash
 curl --location 'http://localhost:8080/api/audio/process' \
 --header 'Content-Type: application/octet-stream' \
---data '@c:/Users/kesha/Downloads/test.wav' \
+--data '@/path/to/your/file.wav' \
 --output reply.wav
 ```
 
